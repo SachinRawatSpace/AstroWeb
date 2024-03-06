@@ -69,7 +69,6 @@ class AstrologerDetail extends React.Component {
     // latest code
     if (userId !== "" && userId !== null) {
       if (this.state.astroData?.status === "Online") {
-        debugger;
         let astrocharge = this.state.astroData?.callCharge * 5;
         let useramount = this.state.useramount;
         if (useramount > astrocharge) {

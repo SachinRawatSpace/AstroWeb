@@ -4,36 +4,35 @@ import {
   Container,
   Row,
   Col,
- 
   Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import LayoutOne from "../../layouts/LayoutOne";
 import "../../assets/scss/astroteam.scss";
 import axiosConfig from "../../axiosConfig";
-import { Modal, ModalHeader, ModalBody, } from "reactstrap";
-
 import pay1 from "../../assets/img/icon-img/pay-1.png";
-
 import pay3 from "../../assets/img/icon-img/pay-3.png";
 import pay4 from "../../assets/img/icon-img/pay-4.png";
 import pay5 from "../../assets/img/icon-img/pay-5.png";
 import pay6 from "../../assets/img/icon-img/pay-6.png";
 import swal from "sweetalert";
 
-
 class PaymentDetail extends React.Component {
-  
   constructor(props) {
     super(props);
+    console.log(props.location.state);
     this.state = {
-      name: '',
-      amount: '',
-      number: '',
-      MUID: '',
-      transactionId: '',
+      name: "",
+      amount: props.location.state || 0,
+      gst: "",
+      totalAmt: null,
+      number: "",
+      MUID: "",
+      transactionId: "",
       modal: false,
     };
-
     this.toggle = this.toggle.bind(this);
   }
 
@@ -42,39 +41,61 @@ class PaymentDetail extends React.Component {
       modal: !this.state.modal,
     });
   }
-  
-  submitHandler = async(e) => {
-   
+  componentDidMount() {
+    const Gst = (this.state.amount * 18) / 100;
+    this.setState({ gst: Gst });
+    console.log(Gst, typeof this.state.amount);
+    const subtotal1 = Number(this.state.amount) + Number(Gst);
+    this.setState({ totalAmt: subtotal1 });
+    console.log(typeof subtotal1);
+  }
+  componentDidUpdate(prevProps) {
+    console.log(" update", prevProps);
+  }
+  submitHandler = async e => {
     e.preventDefault();
-  
+
     const data = {
       name: "Sanggjay",
-      amount: 1,
+      amount: Number(this.state.totalAmt).toFixed(2),
       number: 7999029856,
-      MUID:"MUID"+Date.now(),
-      transactionId:"T"+Date.now(),
-    };  
+      MUID: "MUID" + Date.now(),
+      transactionId: "T" + Date.now(),
+    };
     // const data = {
     //   name: this.state.name,
     //   amount: this.state.amount,
     //   number: this.state.number,
     //   MUID:this.state.MUID,
     //   transactionId:this.state.transactionId,
-      
-    // };  
-   
-   await axiosConfig
+    // };
+
+    await axiosConfig
       .post(`/api/payment`, data)
       .then(response => {
-       
-        let data=response?.data;
-        console.log(response?.data);  
+        // console.log(response?.data);
         window.open(response?.data);
       })
       .catch(error => {
         swal("Error!", "You clicked the button!", "error");
         console.log(error);
-      
+      });
+
+    let userId = JSON.parse(localStorage.getItem("user_id"));
+    let obj = {
+      userid: userId,
+      amount: Number(this.state.totalAmt).toFixed(2),
+    };
+    axiosConfig
+      .post(`/user/add_custome_amt`, obj)
+      .then(response => {
+        // console.log("@@@@@", response.data.data);
+        // swal("Success!", "Submitted SuccessFull!", "success");
+      })
+
+      .catch(error => {
+        swal("Error!", "You clicked the button!", "error");
+        console.log(error);
       });
   };
 
@@ -113,25 +134,24 @@ class PaymentDetail extends React.Component {
                   <ul>
                     <li>
                       Order Subtotal
-                      <span>₹ 501.00</span>
+                      <span>₹ {Number(this.state.amount).toFixed(2)}</span>
                     </li>
                     <li>
                       Payable Amount
-                      <span>₹ 501.00</span>
+                      <span>₹ {Number(this.state.amount).toFixed(2)}</span>
                     </li>
                     <li>
                       GST @18%
-                      <span>₹ 90.18</span>
+                      <span>₹ {this.state.gst}</span>
                     </li>
                     <li>
                       Total Payable Amount
-                      <span>₹ 591.18</span>
+                      <span>₹ {Number(this.state.totalAmt).toFixed(2)}</span>
                     </li>
                   </ul>
                 </div>
               </Col>
               <Col lg="8" className="py-5">
-           
                 <Row>
                   <Col md="12">
                     <div className="off-code">
@@ -199,9 +219,7 @@ class PaymentDetail extends React.Component {
                     </div>
                   </Col>
                 </Row>
-              <Button onClick={this.submitHandler}>
-              Pay Now
-              </Button>
+                <Button onClick={this.submitHandler}>Pay Now</Button>
               </Col>
             </Row>
           </Container>

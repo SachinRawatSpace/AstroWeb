@@ -14,17 +14,12 @@ class UserChatHistory extends React.Component {
     this.state = {
       UserChatHistory: [],
       data: {},
+      WalletBalance: "",
     };
 
     this.state = {
       TablerowData: [],
       columns: [
-        // {
-        //   headerName: "ID",
-        //   field: "transaction_id",
-        //   sortable: true,
-        //   filter: true,
-        // },
         {
           headerName: "Astrologer Name",
           field: "astroId.fullname",
@@ -84,14 +79,23 @@ class UserChatHistory extends React.Component {
   }
   componentDidMount = () => {
     let userId = JSON.parse(localStorage.getItem("user_id"));
+
+    axiosConfig
+      .get(`/user/viewoneuser/${userId}`)
+      .then(response => {
+        console.log(response.data.data.amount);
+        // sessionStorage.setItem("userBalance", response.data.data.amount);
+        this.setState({ WalletBalance: response.data.data.amount });
+      })
+      .catch(error => {
+        console.log(error);
+      });
     axiosConfig
       .get(`/user/userChathistory/${userId}`)
       .then(response => {
-        // console.log(response.data.data);
         const AllChatData = response.data.data.filter(
-          ele => ele.type === "Chat"
+          ele => ele.type === "chat"
         );
-        console.log(AllChatData);
         this.setState({
           UserChatHistory: AllChatData,
         });
@@ -102,6 +106,7 @@ class UserChatHistory extends React.Component {
     axiosConfig
       .get(`/user/userChathistory/${userId}`)
       .then(response => {
+        // console.log(response);
         this.setState({
           amount: response.data.data.amount,
         });
@@ -140,7 +145,8 @@ class UserChatHistory extends React.Component {
                     <h1>UserChatHistory Transactions</h1>
 
                     <h3>
-                      Available balance : <span>{this.state.amount}</span>
+                      Available balance :
+                      <span>Rs {this.state.WalletBalance}</span>
                     </h3>
                   </div>
                 </Col>
@@ -169,130 +175,3 @@ class UserChatHistory extends React.Component {
   }
 }
 export default UserChatHistory;
-
-// import React from "react";
-
-// import { Container, Row, Col, Table } from "reactstrap";
-// import astrologinbg from "../../assets/img/astrologin-bg.jpg";
-
-// import LayoutOne from "../../layouts/LayoutOne";
-// import "../../assets/scss/astroteam.scss";
-
-// import axiosConfig from "../../axiosConfig";
-
-// class UserCallHistory extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       userChatList: [],
-//     };
-//   }
-//   componentDidMount() {
-//     let userId = JSON.parse(localStorage.getItem("user_id"));
-//     axiosConfig
-//       .get(`/user/userChathistory/${userId}`)
-//       .then(response => {
-//         const responseData = response?.data?.data;
-//         console.log(responseData);
-
-//         responseData.filter(ele => ele.type === "Chat");
-
-//         // if (responseData === true) {
-//         // console.log(allChat);
-//         this.setState({
-//           userChatList: responseData,
-//         });
-//         // }
-//       })
-//       .catch(error => {
-//         console.log(error);
-//       });
-//   }
-
-//   render() {
-//     const { userChatList } = this.state;
-
-//     return (
-//       <LayoutOne headerTop="visible">
-//         <section className="pt-0 pb-0">
-//           <div
-//             className=""
-//             style={{
-//               float: "left",
-//               width: "100%",
-//               backgroundColor: "#272727",
-//               position: "relative",
-//               backgroundAttachment: "fixed",
-//               backgroundSize: "cover",
-//               color: "#ffffff",
-//               padding: " 50px 0px 50px 0px",
-//               backgroundImage: `url(${astrologinbg})`,
-//               backgroundPosition: "center center",
-//               backgroundRepeat: " no-repeat",
-//               textAlign: "center",
-//             }}
-//           >
-//             <Container>
-//               <Row>
-//                 <Col md="12">
-//                   <div className="leftcont text-left">
-//                     <h1>UserChatHistory Transactions</h1>
-//                   </div>
-//                 </Col>
-//               </Row>
-//             </Container>
-//           </div>
-//         </section>
-
-//         <section>
-//           <Container>
-//             <Row>
-//               <Col lg="12">
-//                 <div className="">
-//                   <Table striped className="">
-//                     <thead>
-//                       <tr>
-//                         <th>#Conversation ID</th>
-//                         <th>Astrologer Name</th>
-
-//                         <th>Conversation Type</th>
-//                         <th>Rate</th>
-//                         <th>Duration</th>
-
-//                         <th>Deducation</th>
-//                         {/* <th>Date/Time</th> */}
-//                       </tr>
-//                     </thead>
-//                     {userChatList.length
-//                       ? userChatList.map(user => {
-//                           return (
-//                             <tbody key={user._id}>
-//                               <tr>
-//                                 <th>{user?.Sid}</th>
-//                                 <td>{user?.astroId?.fullname}</td>
-
-//                                 <td>{user.type}</td>
-
-//                                 <td>{user?.astroid?.callCharge}/Min.</td>
-
-//                                 <td>{user?.Duration} Min</td>
-//                                 <td>{user?.userdeductedAmt} Rs</td>
-//                                 {/* <td>{user?.DateCreated.split("T")[0]}</td> */}
-//                               </tr>
-//                             </tbody>
-//                           );
-//                         })
-//                       : null}
-//                   </Table>
-//                 </div>
-//               </Col>
-//             </Row>
-//           </Container>
-//         </section>
-//       </LayoutOne>
-//     );
-//   }
-// }
-
-// export default UserCallHistory;

@@ -22,11 +22,11 @@ class UserChatHistoryList extends React.Component {
     let { id } = this.props.match.params;
     let userId = JSON.parse(localStorage.getItem("user_id"));
 
-    console.log(userId);
+    // console.log(userId);
     axiosConfig
       .get(`/user/getOne_Conversation_Wallet/${userId}`)
       .then(response => {
-        console.log("userChatList", response.data.data);
+        // console.log("userChatList", response.data.data);
         if (response.data.status === true) {
           this.setState({
             userChatList: response.data.data,
@@ -40,7 +40,7 @@ class UserChatHistoryList extends React.Component {
     axiosConfig
       .get(`/user/userChathistory/${userId}`)
       .then(response => {
-        console.log("chatList", response.data.data);
+        // console.log("chatList", response.data.data);
         if (response.data.status === true) {
           this.setState({
             userChatHistory: response.data.data,

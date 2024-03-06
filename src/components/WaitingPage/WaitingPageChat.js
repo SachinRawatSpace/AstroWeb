@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes, { object } from "prop-types";
 import React, { Fragment, useState, useEffect, useRef } from "react";
 
 import { Link } from "react-router-dom";
@@ -30,8 +30,8 @@ const Waitingpage = ({ location, args }) => {
 
   const history = useHistory();
   const mylocation = useLocation();
-  console.log(mylocation?.state?.data?.astroid);
-  console.log(history?.location?.state?.data?.astroid);
+  // console.log(mylocation?.state?.data?.astroid);
+  // console.log(history?.location?.state?.data?.astroid);
   let waitingId =
     mylocation?.state?.data?.astroid || history?.location?.state?.data?.astroid;
   const toggle = () => setModal(!modal);
@@ -52,10 +52,10 @@ const Waitingpage = ({ location, args }) => {
   const handlegetAcceptAstro = () => {
     intervalRef.current = setInterval(() => {
       let userid = JSON.parse(localStorage.getItem("user_id"));
-      console.log(mylocation.state?._id);
+      // console.log(mylocation.state?._id);
       let id =
         mylocation?.state?._id || sessionStorage.getItem("notificationdata");
-      console.log(id);
+      // console.log(id);
       axiosConfig
         .get(`/user/getOnenotificationByastro/${id}`)
         .then(res => {
@@ -65,7 +65,16 @@ const Waitingpage = ({ location, args }) => {
           ) {
             swal("Astro is now Accepted Your Request");
             clearInterval(intervalRef.current);
-            history.push("/chatApp");
+            console.log(JSON.parse(localStorage.getItem("UserChatData")));
+            // history.push("/chatApp");
+            history.push({
+              pathname: "/chatApp",
+              state: JSON.parse(localStorage.getItem("UserChatData")),
+            });
+            //  this.props.history.push({
+            //    pathname: "/waitingpagechat",
+            //    state: response.data,
+            //  });
 
             axiosConfig
               .get(`/admin/dltNotificattion/${res.data.data?._id}`)
@@ -146,5 +155,7 @@ const mapDispatchToProps = dispatch => {
     },
   };
 };
-
+// const mapStateToProps = state => {
+//   return { todos: state.todos };
+// };
 export default connect(mapStateToProps, mapDispatchToProps)(Waitingpage);

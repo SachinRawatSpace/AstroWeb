@@ -18,9 +18,7 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import axiosConfig from "../../axiosConfig";
 import { Button, Col, Container, Row } from "reactstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-
+import { useHistory, useLocation } from "react-router-dom";
 import swal from "sweetalert";
 
 const WaitingPageVideo = ({ location, args }) => {
@@ -31,8 +29,6 @@ const WaitingPageVideo = ({ location, args }) => {
 
   const history = useHistory();
   const mylocation = useLocation();
-  // console.log("history", history.location.state);
-  console.log("useLocation", mylocation.state);
   const toggle = () => setModal(!modal);
   const fetchOrder = async () => {
     let userid = JSON.parse(localStorage.getItem("user_id"));
@@ -70,7 +66,7 @@ const WaitingPageVideo = ({ location, args }) => {
             axiosConfig
               .get(`/admin/dltNotificattion/${res.data.data?._id}`)
               .then(res => {
-                console.log("notification deleted", res);
+                // console.log("notification deleted", res);
               })
               .catch(err => {
                 console.log(err);

@@ -11,7 +11,7 @@ class AstroTeam extends React.Component {
       <section id="team" class="pb-5">
         <Container>
           <div className="heading mb-30">
-            <h2>Best Astrologers </h2>
+            <h2>Best Astrologers</h2>
             <img src={textbottom} alt="" />
           </div>
           <Row>

@@ -13,7 +13,7 @@ import { multilanguage, loadLanguages } from "redux-multilanguage";
 import { connect } from "react-redux";
 import { BreadcrumbsProvider } from "react-breadcrumbs-dynamic";
 import TermsOfUse from "./wrappers/myPage/TermsOfUse";
-import {} from "react";
+// import {} from "react";
 import { history } from "./history";
 
 const HomeFurnitureTwo = lazy(() => import("./pages/home/HomeFurnitureTwo"));
@@ -206,16 +206,6 @@ const FreeKundli = lazy(() =>
 const PitraDosh = lazy(() => import("./components/astrology/PitraDosh"));
 const KalsharpDosh = lazy(() => import("./components/astrology/KalsharpDosh"));
 const ManglikDosh = lazy(() => import("./components/astrology/ManglikDosh"));
-// const PlanetDasha = lazy(() =>
-//   import("./components/astrology/dasha/PlanetDasha")
-// );
-// const VismshottariDasha = lazy(() =>
-//   import("./components/astrology/dasha/VismshottariDasha")
-// );
-// const YoginiDasha = lazy(() =>
-//   import("./components/astrology/dasha/YoginiDasha")
-// );
-// const CharDasha = lazy(() => import("./components/astrology/dasha/CharDasha"));
 
 const bannerSection = lazy(() =>
   import("./components/astrology/bannerSection")

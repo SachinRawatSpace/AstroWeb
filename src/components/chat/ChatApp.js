@@ -9,7 +9,6 @@ import ChatAppMassage from "./ChatAppMassage";
 import axiosConfig from "../../axiosConfig";
 import { Fetchuserdetail } from "../header/IconGroup";
 import swal from "sweetalert";
-// import { FiRefreshCcw } from "react-icons/fi";
 
 class ChatApp extends React.Component {
   constructor(props) {
@@ -72,6 +71,29 @@ class ChatApp extends React.Component {
   };
 
   handleStart = () => {
+    let userId = JSON.parse(localStorage.getItem("user_id"));
+    let astroId = localStorage.getItem("astroId");
+    //  sessionStorage.setItem("typeofcall", "Video");
+
+    let payload = {
+      userId: userId,
+      astroId: astroId,
+      type: "chat",
+    };
+    axiosConfig
+      .post(`/user/deductChatBalance`, payload)
+      .then(res => {
+        // console.log("callduration", res.data);
+        //  Fetchuserdetail();
+      })
+      .catch(err => {
+        console.log(err.response.data.message);
+        if (err.response.data.message === "Insufficient balance for the call") {
+          this.handlestop();
+          //  this.props.history.push("/allastrologerlist");
+          swal("You have Low Balance");
+        }
+      });
     this.setState({ counterState: false });
     this.countRef.current = setInterval(() => {
       this.setState({ setTimer: this.state.setTimer + 1 });
@@ -108,7 +130,6 @@ class ChatApp extends React.Component {
       const astroId = localStorage.getItem("astroId");
       let userid = JSON.parse(localStorage.getItem("user_id"));
       axiosConfig.get(`/user/getone_chat/${userid}/${astroId}`).then(res => {
-        // console.log("res>>><<<", res.data.data);
         if (res.data.data?.roomid) {
           this.setState({ roomId: res.data.data?.roomid });
           axiosConfig
@@ -123,11 +144,23 @@ class ChatApp extends React.Component {
       });
     }, 3000);
   };
-
-  componentDidMount = () => {
-    const astroId = localStorage.getItem("astroId");
+  // componentDidUpdate = async (prevState, prevProps) => {
+  // console.log(prevState, prevProps);
+  // const UserChatData = JSON.parse(localStorage.getItem("UserChatData"));
+  // if (UserChatData?.userid?.fullname) {
+  //   await this.sendChatDetails();
+  //   localStorage.removeItem("UserChatData");
+  // }
+  // };
+  componentDidMount = async () => {
     let userid = JSON.parse(localStorage.getItem("user_id"));
-    this.getChatonedata();
+    const astroId = localStorage.getItem("astroId");
+    const UserChatData = JSON.parse(localStorage.getItem("UserChatData"));
+    if (UserChatData?.userid?.fullname) {
+      await this.sendChatDetails();
+      // localStorage.removeItem("UserChatData");
+    }
+    await this.getChatonedata();
 
     axiosConfig
       .get(`/user/getone_chat/${userid}/${astroId}`)
@@ -166,7 +199,6 @@ class ChatApp extends React.Component {
     }
     let user_id = localStorage.getItem("user_id");
     // let userid = JSON.parse(localStorage.getItem("user_id"));
-
     // let { id } = this.props.match.params;
     axiosConfig
       .get(`/user/getroomid/${userid}`)
@@ -187,6 +219,54 @@ class ChatApp extends React.Component {
       });
   };
 
+  sendChatDetails = () => {
+    const astroId = localStorage.getItem("astroId");
+    const UserChatData = JSON.parse(localStorage.getItem("UserChatData"));
+    let userid = JSON.parse(localStorage.getItem("user_id"));
+    if (userid !== "" && userid !== null) {
+      if (this.state.msg !== "") {
+        let value = `FirstName: ${UserChatData?.firstname}<br>
+                    BirthPlace: ${UserChatData?.birthPlace}<br>
+                    Date Of Time: ${UserChatData?.date_of_time}<br>
+                    Date Of Birth: ${UserChatData?.dob}<br>
+                    Gender: ${UserChatData?.gender}<br>`;
+
+        let obj = {
+          astroid: astroId,
+          msg: value,
+        };
+
+        axiosConfig
+          .post(`/user/addchat/${userid}`, obj)
+          .then(response => {
+            this.setState({ chatRoomdata: response.data.data });
+            if (response.data.status === true) {
+              this.setState({ msg: "" });
+              axiosConfig
+                .get(`/user/allchatwithuser/${response.data?.data?.roomid}`)
+                .then(respons => {
+                  // console.log(respons.data);
+                  // if (this.state.counterState) {
+                  //   this.handleStart();
+                  // }
+                  // this.handlestartinterval();
+                  // if (respons.data.status === true) {
+                  //   this.setState({ roomChatData: respons?.data?.data });
+                  //   this.handlelivechat();
+                  // }
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            }
+          })
+          .catch(error => {
+            // swal("Error!", "You clicked the button!", "error");
+            console.log(error);
+          });
+      } else swal("Input filed is blank", "Fill it before send");
+    }
+  };
   startTimer() {
     if (this.timer === 0 && this.state.seconds > 0) {
       this.timer = setInterval(this.countDown, 1000);
@@ -240,9 +320,7 @@ class ChatApp extends React.Component {
       axiosConfig
         .post(`/user/addchat/${userid}`, obj)
         .then(response => {
-          console.log("chat", response.data);
           this.setState({ CurrentRoomid: response?.data?.data?.roomid });
-          console.log("chat", response?.data?.data?.roomid);
           if (response.data.status === true) {
             this.setState({ msg: "" });
             axiosConfig
@@ -250,7 +328,6 @@ class ChatApp extends React.Component {
               .then(respons => {
                 this.handlelivechat();
                 console.log(respons?.data?.data);
-                // console.log(respons?.data?.status);
                 if (respons.data.status === true) {
                   this.setState({ roomChatData: respons?.data.data });
                 }
@@ -286,7 +363,7 @@ class ChatApp extends React.Component {
       axiosConfig
         .get(`/user/allchatwithuser/${this.state.CurrentRoomid}`)
         .then(response => {
-          console.log(response?.data?.data);
+          // console.log(response?.data?.data);
           if (response.data.status === true) {
             this.setState({ roomChatData: response?.data.data });
           }
@@ -327,7 +404,7 @@ class ChatApp extends React.Component {
 
   submitHandler = async e => {
     e.preventDefault();
-    console.log("sumittttt");
+    console.log("submittttt");
     const astroId = localStorage.getItem("astroId");
     let userid = JSON.parse(localStorage.getItem("user_id"));
     if (userid !== "" && userid !== null) {
@@ -336,7 +413,7 @@ class ChatApp extends React.Component {
           astroid: astroId,
           msg: this.state.msg,
         };
-        console.log("obj", obj);
+        // console.log("obj", obj);
         axiosConfig
           .post(`/user/addchat/${userid}`, obj)
           .then(response => {
@@ -439,7 +516,7 @@ class ChatApp extends React.Component {
                               );
                             }}
                           >
-                            <i className="material-icons">send</i>
+                            <i className="material-icons">Send</i>
                           </button>
                         </form>
                       </>
@@ -493,7 +570,7 @@ class ChatApp extends React.Component {
                           );
                         }}
                       >
-                        <i className="material-icons">send</i>
+                        <i className="material-icons">Send</i>
                       </button>
                     </form>
                   </div>

@@ -26,7 +26,6 @@ class WalletMoney extends React.Component {
 
     this.toggle = this.toggle.bind(this);
   }
-
   toggle() {
     this.setState({
       modal: !this.state.modal,
@@ -34,7 +33,6 @@ class WalletMoney extends React.Component {
   }
   componentDidMount = () => {
     let user_id = JSON.parse(localStorage.getItem("user_id"));
-
     console.log("first", user_id);
     axiosConfig
       .get(`/user/viewoneuser/${user_id}`)
@@ -47,7 +45,6 @@ class WalletMoney extends React.Component {
       .catch(error => {
         console.log(error);
       });
-      
 
     axiosConfig
       .get("/user/active_plans")
@@ -71,10 +68,6 @@ class WalletMoney extends React.Component {
           <div
             className=""
             style={{
-              // backgroundColor: "#FFD59E",
-              // width: "100%",
-              // padding: "70px 0px",
-              // backgroundSize: "cover",
               float: "left",
               width: "100%",
               backgroundColor: "#272727",
@@ -122,7 +115,12 @@ class WalletMoney extends React.Component {
                 ? planList.map((plan, index) => {
                     return (
                       <Col xl="3" lg="3" md="3" sm="6" xs="6" key={index}>
-                        <Link to="/paymentdetail">
+                        <Link
+                          to={{
+                            pathname: "/paymentdetail",
+                            state: plan.amount,
+                          }}
+                        >
                           <div className="promoBox success-box info-ribbon">
                             <aside>
                               <p>{plan.title}</p>
@@ -134,108 +132,6 @@ class WalletMoney extends React.Component {
                     );
                   })
                 : null}
-
-              {/*    <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 200</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col> */}
-              {/* <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link  to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 300</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col>
-                         <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link  to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 500</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col>
-                         <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link  to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 1000</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col>
-                         <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link  to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 2000</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col>
-                         <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link  to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 100</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col>
-                         <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link  to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 3000</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col>
-                         <Col xl="3" lg="3" md="3" sm="6" xs="6">
-                               <Link  to="paymentdetail">
-                                      <div className="promoBox success-box info-ribbon">
-                                        <aside>
-                                            <p>100% extra</p>
-                                        </aside>
-                                                <h4>INR 4000</h4>
-                                                <p></p>     
-                                        </div>
-                               </Link>
-                         </Col> */}
-
-              {/* <Col lg="12">
-                             <div className="w-offer">
-                                 <Button onClick={this.toggle} >
-                                     <i class="fa fa-percent" aria-hidden="true"></i>
-
-                                     apply voucher code
-
-                                     <i class="fa fa-angle-right" aria-hidden="true"></i>
-
-                                 </Button>
-                             </div>
-                         </Col> */}
             </Row>
           </Container>
         </section>

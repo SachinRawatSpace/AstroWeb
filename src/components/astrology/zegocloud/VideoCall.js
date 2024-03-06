@@ -48,9 +48,11 @@ export default function App() {
   };
 
   const handlestartinterval = () => {
+    debugger;
     ref.current = setInterval(() => {
       let userId = JSON.parse(localStorage.getItem("user_id"));
       let astroId = localStorage.getItem("astroId");
+      console.log(userId, astroId);
       sessionStorage.setItem("typeofcall", "Video");
 
       let payload = {
@@ -59,14 +61,15 @@ export default function App() {
         type: "Video",
         // status: true,
       };
-      console.log("payload", payload);
       axiosConfig
         .post(`/user/deductChatBalance`, payload)
         .then(res => {
+          debugger;
           console.log("callduration", res.data);
           Fetchuserdetail();
         })
         .catch(err => {
+          debugger;
           console.log(err.response.data.message);
           if (
             err.response.data.message === "Insufficient balance for the call"
@@ -180,7 +183,7 @@ export default function App() {
         axiosConfig
           .post(`/user/changeStatus`, value)
           .then(res => {
-            console.log("CloneJob Stop astrooo", res);
+            // console.log("CloneJob Stop astrooo", res);
             localStorage.removeItem("CurrentChat_userid");
             history.push("/astrorating");
           })
@@ -201,7 +204,7 @@ export default function App() {
       <div
         className="myCallContainer"
         ref={myMeeting}
-        style={{ width: "100vw", height: "100vh" }}
+        style={{ width: "98vw", height: "100vh" }}
       ></div>
     </div>
   );

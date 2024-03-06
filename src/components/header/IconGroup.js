@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-// import "../../../public/assets/img/usedemo.jpg"
 import Buyimg from "../../../src/assets/img/boy-img.png";
 import MenuCart from "./sub-components/MenuCart";
 import { deleteFromCart } from "../../redux/actions/cartActions";
@@ -36,7 +35,6 @@ const IconGroup = ({
     offcanvasMobileMenu.classList.add("active");
   };
 
-  //const { id } = useParams();
   const fetchcarts = async token => {
     const { data } = await Axios.get({
       headers: {
@@ -56,7 +54,6 @@ const IconGroup = ({
     }, 1000);
   };
 
-  // setuserBalance(Balance);
   const Balance = sessionStorage.getItem("userBalance");
 
   useEffect(() => {

@@ -125,7 +125,7 @@ class KundaliForm extends React.Component {
       f_lon: this.state.selectedCity1?.longitude,
       f_tzone: this.state.timezonef,
     };
-    console.log(obj);
+    // console.log(obj);
     axiosConfig
       .post(`/user/match_making_report`, obj)
       .then(response => {

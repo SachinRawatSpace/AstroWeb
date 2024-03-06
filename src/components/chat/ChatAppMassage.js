@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/scss/chat.scss";
+import ReactHtmlParser from "react-html-parser";
 class ChatAppMassage extends React.Component {
   constructor(props) {
     super(props);
@@ -19,12 +20,17 @@ class ChatAppMassage extends React.Component {
                 return (
                   <>
                     {chat.type === "user" ? (
-                      <div className="message me">
-                        <div className="message-body">{chat.msg}</div>
+                      <div className="message me aaa">
+                        <div
+                          className="message-body"
+                          dangerouslySetInnerHTML={{ __html: chat.msg }}
+                        />
                       </div>
                     ) : (
                       <div className="message">
-                        <div className="message-body">{chat.msg}</div>
+                        <div className="message-body abc">
+                          {ReactHtmlParser(chat.msg)}
+                        </div>
                       </div>
                     )}
                   </>

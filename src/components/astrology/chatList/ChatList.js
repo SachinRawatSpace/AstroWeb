@@ -82,7 +82,6 @@ class ChatList extends React.Component {
   };
   handleChating = selectedId => {
     this.handleBalacecheck();
-
     // let userId = JSON.parse(localStorage.getItem("user_id"));
     // let mobileNo = JSON.parse(localStorage.getItem("user_mobile_no"));
     // console.log("USer", mobileNo);
@@ -112,9 +111,10 @@ class ChatList extends React.Component {
     //   });
   };
 
-  handleBalacecheck = () => {
+  handleBalacecheck = (id, list) => {
+    console.log(list);
     let userId = JSON.parse(localStorage.getItem("user_id"));
-    // let { id } = this.props.match.params;
+    localStorage.setItem("UserChatData", JSON.stringify(list));
     let astroId = localStorage.getItem("astroId");
     console.log("astroId", astroId);
 
@@ -271,7 +271,7 @@ class ChatList extends React.Component {
                                   <button
                                     className="btn btn-denger wr"
                                     onClick={() =>
-                                      this.handleBalacecheck(list._id)
+                                      this.handleBalacecheck(list._id, list)
                                     }
                                   >
                                     Start Chat

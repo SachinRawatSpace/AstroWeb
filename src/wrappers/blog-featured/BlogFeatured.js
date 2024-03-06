@@ -4,6 +4,7 @@ import blogFeaturedData from "../../data/blog-featured/blog-featured.json";
 import BlogFeaturedSingle from "../../components/blog-featured/BlogFeaturedSingle";
 // import SectionTitle from "../../components/section-title/SectionTitle";
 import textbottom from "../../assets/img/textbottom.png";
+// import appImg from "../../assets/img/app.jpeg";
 import axiosConfig from "../../axiosConfig";
 
 const BlogFeatured = ({ spaceTopClass, spaceBottomClass }) => {
@@ -44,6 +45,16 @@ const BlogFeatured = ({ spaceTopClass, spaceBottomClass }) => {
                 />
               );
             })}
+        </div>
+        <div>
+          <div style={{ width: "100%" }}>
+            {/* <img src={appImg} height={100} alt="" /> */}
+          </div>
+          Download link
+          <a className="px-2" href="https://astrogyata.in/app-release.apk">
+            https://astrogyata.in/app-release.apk
+          </a>
+          <span className="px-2">Only for android</span>
         </div>
       </div>
     </div>
